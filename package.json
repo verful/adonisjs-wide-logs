@@ -1,0 +1,122 @@
+{
+  "name": "@verful/adonisjs-wide-logs",
+  "version": "0.0.0-development",
+  "description": "Wide event logging for AdonisJS: one context-rich log line per request, job or unit of work",
+  "keywords": [
+    "adonis",
+    "adonisjs",
+    "canonical-log-lines",
+    "logging",
+    "observability",
+    "wide-events"
+  ],
+  "homepage": "https://github.com/verful/adonisjs-wide-logs#readme",
+  "bugs": "https://github.com/verful/adonisjs-wide-logs/issues",
+  "license": "MIT",
+  "author": "Arthur Emanuel",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/verful/adonisjs-wide-logs.git"
+  },
+  "files": [
+    "build",
+    "!build/bin",
+    "!build/tests"
+  ],
+  "type": "module",
+  "main": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "exports": {
+    ".": "./build/index.js",
+    "./wide_logs_provider": "./build/providers/wide_logs_provider.js",
+    "./types": "./build/src/types.js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown && tsc -p tsconfig.build.json && pnpm copy:stubs",
+    "copy:stubs": "node --eval \"require('node:fs').cpSync('stubs', 'build/stubs', { recursive: true, filter: (p) => !p.endsWith('.ts') })\"",
+    "checks": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test",
+    "format": "oxfmt",
+    "format:check": "oxfmt --check",
+    "lint": "oxlint --deny-warnings",
+    "prepare": "lefthook install",
+    "test": "node --import=@poppinss/ts-exec --enable-source-maps bin/test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@adonisjs/assembler": "^8.6.0",
+    "@adonisjs/auth": "^10.1.1",
+    "@adonisjs/core": "^7.7.0",
+    "@adonisjs/otel": "^1.3.0",
+    "@adonisjs/queue": "^0.6.2",
+    "@adonisjs/tsconfig": "^2.0.0",
+    "@commitlint/cli": "^21.2.4",
+    "@commitlint/config-conventional": "^21.2.4",
+    "@commitlint/types": "^21.2.3",
+    "@japa/assert": "^4.2.0",
+    "@japa/runner": "^5.4.0",
+    "@poppinss/ts-exec": "^1.5.2",
+    "@semantic-release/changelog": "^7.0.0",
+    "@semantic-release/git": "^11.0.1",
+    "@types/node": "^24.19.2",
+    "conventional-changelog-conventionalcommits": "^10.4.1",
+    "lefthook": "^2.2.2",
+    "oxfmt": "^0.80.0",
+    "oxlint": "^1.95.0",
+    "semantic-release": "^26.0.1",
+    "tsdown": "^0.23.7",
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "@adonisjs/core": "^7.0.0",
+    "@adonisjs/otel": "^1.2.0 || ^2.0.0",
+    "@adonisjs/queue": "^0.6.0 || ^0.7.0"
+  },
+  "peerDependenciesMeta": {
+    "@adonisjs/otel": {
+      "optional": true
+    },
+    "@adonisjs/queue": {
+      "optional": true
+    }
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      [
+        "@semantic-release/release-notes-generator",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/github",
+      [
+        "@semantic-release/git",
+        {
+          "assets": [
+            "package.json",
+            "CHANGELOG.md"
+          ],
+          "message": "chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}"
+        }
+      ]
+    ]
+  },
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "packageManager": "pnpm@10.34.6"
+}
