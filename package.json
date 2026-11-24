@@ -1,6 +1,6 @@
 {
   "name": "@verful/adonisjs-wide-logs",
-  "version": "0.0.0-development",
+  "version": "1.0.0",
   "description": "Wide event logging for AdonisJS: one context-rich log line per request, job or unit of work",
   "keywords": [
     "adonis",
