@@ -1,0 +1,21 @@
+# Installed by `pnpm install` (the `prepare` script runs `lefthook install`)
+pre-commit:
+  jobs:
+    # Format first, so lint and typecheck see the staged result
+    - name: format
+      run: pnpm exec oxfmt --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true
+    - group:
+        parallel: true
+        jobs:
+          - name: lint
+            glob: '*.{js,mjs,cjs,ts,mts,cts}'
+            run: pnpm exec oxlint --deny-warnings {staged_files}
+          - name: typecheck
+            glob: '*.{ts,mts,cts}'
+            run: pnpm typecheck
+
+commit-msg:
+  jobs:
+    - name: commitlint
+      run: pnpm exec commitlint --edit {1}
