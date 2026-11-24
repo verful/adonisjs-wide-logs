@@ -1,2 +1,7 @@
 export { configure } from './configure.ts'
+export { defineConfig } from './src/define_config.ts'
+export { ExceptionHandler } from './src/http/exception_handler.ts'
+export { measuredFetch } from './src/measured_fetch.ts'
+export { FakeSink } from './src/sink.ts'
+export { wideEvents } from './src/wide_events.ts'
 export { stubsRoot } from './stubs/main.ts'

@@ -1,4 +1,5 @@
-/**
- * Placeholder until the wide events module lands
- */
-export type WideEventFields = Record<string, unknown>
+export type { HttpConfig, QueueConfig, ResolvedConfig, WideLogsConfig } from './define_config.ts'
+export type { SamplingConfig } from './sampling.ts'
+export type { EmittedEvent, WaitForOptions, WideEventSink } from './sink.ts'
+export type { AppendOptions, WideEventFields } from './wide_event.ts'
+export type { MeasureOptions } from './wide_events.ts'

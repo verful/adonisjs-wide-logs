@@ -1,0 +1,28 @@
+{{{
+  exports({ to: app.configPath('wide_logs.ts') })
+}}}
+import { defineConfig } from '@verful/adonisjs-wide-logs'
+
+export default defineConfig({
+  http: {
+    /**
+     * Route params whose values never reach the logged path
+     */
+    // secretParams: /token|secret|signature|password|key/i,
+
+    /**
+     * Fields added to every request's event when it ends, e.g. the tenant
+     */
+    // context: (ctx) => ({ workspace: { id: ctx.params.workspaceId } }),
+  },
+
+  sampling: {
+    /**
+     * Keep every event. Lower it only when log volume costs something:
+     * failures, slow events and job events are always kept
+     */
+    rate: 1,
+    // slowMs: 2000,
+    // drop: (fields) => fields.route === '/health' && fields.status_code === 200,
+  },
+})
