@@ -22,6 +22,14 @@ ESM, TypeScript, published to npm by CI.
 - `providers/`: AdonisJS providers. Each file is an `exports` entry
   (`@verful/adonisjs-wide-logs/<file>`).
 - `src/`: module source. `src/types.ts` is the `./types` export.
+  - `wide_event.ts`: one event's fields. `wide_events.ts`: the public `wideEvents`
+    interface. `runtime.ts`: internal shared state (async context, sink,
+    sampler, config), never exported.
+  - `http/request_event.ts` owns a request's event: open, close, the 4xx/5xx
+    rule, path redaction. The middleware and `ExceptionHandler` only call it.
+  - `queue.ts` reads `@boringnode/queue`'s tracing channels by name, with its
+    own message types, so it imports neither the queue nor its types.
+  - `sink.ts`: `LoggerSink` (production) and `FakeSink` (`wideEvents.fake()`).
 - `stubs/`: `.stub` templates for `configure`. `stubs/main.ts` exports their root.
 - `tests/unit/`: Japa specs (`*.spec.ts`). `tests/helpers/app.ts` boots a test app.
 - `bin/test.ts`: Japa entry point.
@@ -43,6 +51,9 @@ driver and this package's provider, and serves it over HTTP on a random port.
 - Jobs passed in `jobs` run inside `Job.dispatch()` on the sync driver, which
   traces `boringqueue.job.execute`.
 - `logs` holds every record the app logger wrote, parsed from JSON.
+- `createWideLogsApp()` in `tests/helpers/wide_logs.ts` adds the package
+  middleware and exception handler and returns `events`, a `FakeSink`. Wait
+  for events with `events.waitFor(name)`; never sleep for them.
 - Always pass `close` to `cleanup`.
 
 Test through this public surface, not internals. Do not mock modules.
@@ -58,7 +69,7 @@ Test through this public surface, not internals. Do not mock modules.
   `noUncheckedIndexedAccess` and `noPropertyAccessFromIndexSignature`, so the
   package compiles for consumer apps that enable them. Do not relax them.
 - Import relative files with their `.ts` extension. The build rewrites it.
-- `@adonisjs/queue` and `@adonisjs/otel` are optional peers. Import them only
+- `@adonisjs/queue` and `@opentelemetry/api` are optional peers. Import them only
   from code that runs when they are installed (a separate entry or a dynamic
   import), never from the main entry or the provider's top level.
 
